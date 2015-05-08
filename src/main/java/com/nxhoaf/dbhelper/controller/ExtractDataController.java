@@ -5,11 +5,16 @@
  */
 package com.nxhoaf.dbhelper.controller;
 
+import com.nxhoaf.dbhelper.domain.ConnectionInfo;
+import com.nxhoaf.dbhelper.domain.Query;
+import java.sql.SQLException;
+import org.dbunit.DatabaseUnitException;
+
 /**
  *
  * @author nxhoaf
  */
 public interface ExtractDataController {
-    public void extractPartialData();
+    public void extractPartialData(ConnectionInfo connectionInfo, Query query) throws ClassNotFoundException, SQLException, DatabaseUnitException;
     public void extractAllData();
 }
