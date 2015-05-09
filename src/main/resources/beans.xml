@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/util 
         http://www.springframework.org/schema/util/spring-util.xsd">
  
-	<bean id="extractDataController" name="extractDataController" class="com.nxhoaf.dbhelper.controller.ExtractDataControllerImpl" />
+	<bean id="extractorController" name="extractDataController" class="com.nxhoaf.dbhelper.controller.ExtractorControllerImpl" />
         <!--<context:property-placeholder location="classpath*:ApplicationContext.properties"/>-->
         <!--<context:property-placeholder location="classpath:Application.properties"/>-->
         <util:properties id="properties" location="classpath:Application.properties"/>

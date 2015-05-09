@@ -5,8 +5,8 @@
  */
 package com.nxhoaf.dbhelper.view;
 
-import com.nxhoaf.dbhelper.controller.ExtractDataController;
-import com.nxhoaf.dbhelper.controller.ExtractDataControllerImpl;
+import com.nxhoaf.dbhelper.controller.ExtractorController;
+import com.nxhoaf.dbhelper.controller.ExtractorControllerImpl;
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
 import com.nxhoaf.dbhelper.domain.QueryInfo;
@@ -28,16 +28,33 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ExtractDataView extends javax.swing.JFrame {
 
     @Autowired
-    private ExtractDataController extractDataController;
+    private ExtractorController extractDataController;
 
     /**
      * Creates new form MainFrame
      *
      * @param extractDataController
      */
-    public ExtractDataView(ExtractDataController extractDataController) {
+    public ExtractDataView(ExtractorController extractDataController) {
         this.extractDataController = extractDataController;
         initComponents();
+        initDefaultData();
+    }
+    
+    private void initDefaultData() {
+        ExtractorInfo extractorInfo = extractDataController.getDefaultExtractInfo();
+        
+        ConnectionInfo connInfo = extractorInfo.getConnectionInfo();
+        url.setText(connInfo.getConnectionUrl());
+        driver.setText(connInfo.getDriverClass());
+        username.setText(connInfo.getUsername());
+        password.setText(connInfo.getPassword());
+        
+        QueryInfo queryInfo = extractorInfo.getQueryInfo();
+        tableName.setText(queryInfo.getTableName());
+        sqlQuery.setText(queryInfo.getQuery());
+        
+        fileLocation.setText(extractorInfo.getFileLocation());
     }
 
     private ExtractorInfo getExtractorInfo() {
@@ -146,13 +163,9 @@ public class ExtractDataView extends javax.swing.JFrame {
 
         jLabel5.setText("Url:");
 
-        url.setText("jdbc:mysql://localhost:3306/world");
-
         jLabel6.setText("Username:");
 
         jLabel7.setText("Password:");
-
-        username.setText("root");
 
         resetBtn.setText("Reset");
 
@@ -160,20 +173,19 @@ public class ExtractDataView extends javax.swing.JFrame {
 
         jLabel9.setText("Table name:");
 
-        fileLocation.setText("data-set.xml");
-
         jLabel10.setText("SQL:");
 
         sqlQuery.setColumns(20);
         sqlQuery.setRows(5);
-        sqlQuery.setText("select * from world.country c where c.Name like 'A%';");
         jScrollPane1.setViewportView(sqlQuery);
 
-        tableName.setText("country");
+        tableName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableNameActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("Driver:");
-
-        driver.setText("com.mysql.jdbc.Driver");
 
         jLabel4.setFont(new java.awt.Font("Lucida Grande", 2, 10)); // NOI18N
         jLabel4.setText("Written by nxhoaf@gmail.com");
@@ -308,6 +320,10 @@ public class ExtractDataView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_okBtnActionPerformed
 
+    private void tableNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableNameActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -336,10 +352,10 @@ public class ExtractDataView extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
-//        final ExtractDataController extractDataController = new ExtractDataControllerImpl();
+//        final ExtractorController extractDataController = new ExtractorControllerImpl();
 //            Object o = context.getBean("extractDataController");
 //            System.out.println("object: " + o);
-        final ExtractDataController extractDataController = (ExtractDataController) context.getBean("extractDataController");
+        final ExtractorController extractDataController = (ExtractorController) context.getBean("extractorController");
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ExtractDataView(extractDataController).setVisible(true);

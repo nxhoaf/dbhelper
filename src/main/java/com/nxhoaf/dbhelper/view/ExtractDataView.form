@@ -228,9 +228,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="url">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jdbc:mysql://localhost:3306/world"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
@@ -243,9 +240,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="username">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="root"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="password">
     </Component>
@@ -265,9 +259,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="fileLocation">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="data-set.xml"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
@@ -285,15 +276,14 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="select * from world.country c where c.Name like &apos;A%&apos;;"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="tableName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="country"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tableNameActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>
@@ -301,9 +291,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="driver">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="com.mysql.jdbc.Driver"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>

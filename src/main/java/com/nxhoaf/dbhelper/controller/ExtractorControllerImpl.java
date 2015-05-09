@@ -2,6 +2,7 @@ package com.nxhoaf.dbhelper.controller;
 
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
+import com.nxhoaf.dbhelper.domain.PropertyReader;
 import com.nxhoaf.dbhelper.domain.QueryInfo;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dbunit.DatabaseUnitException;
@@ -20,7 +22,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 
-public class ExtractDataControllerImpl implements ExtractDataController {
+public class ExtractorControllerImpl implements ExtractorController {
     private IDatabaseConnection getConnection(ConnectionInfo databaseInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
         Class driverClass = Class.forName(databaseInfo.getDriverClass());
         Connection jdbcConnection = DriverManager.getConnection(databaseInfo.getConnectionUrl(), databaseInfo.getUsername(), databaseInfo.getPassword());
@@ -37,7 +39,7 @@ public class ExtractDataControllerImpl implements ExtractDataController {
         try {
             FlatXmlDataSet.write(partialDataSet, new FileOutputStream(extractorInfo.getFileLocation()));
         } catch (IOException ex) {
-            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -48,15 +50,15 @@ public class ExtractDataControllerImpl implements ExtractDataController {
             IDataSet fullDataSet = connection.createDataSet();
             FlatXmlDataSet.write(fullDataSet, new FileOutputStream("output/full-dataset.xml"));
         } catch (IOException ex) {
-            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DataSetException ex) {
-            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DatabaseUnitException ex) {
-            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -85,5 +87,25 @@ public class ExtractDataControllerImpl implements ExtractDataController {
         System.out.println("All tables: " + Arrays.toString(fullDataSet.getTableNames()));
 
 //        FlatXmlDataSet.write(fullDataSet, new FileOutputStream("full-dataset.xml"));
+    }
+
+    public ExtractorInfo getDefaultExtractInfo() {
+        ConnectionInfo connectionInfo = new ConnectionInfo();
+        
+        connectionInfo.setDriverClass(PropertyReader.getProperty(PropertyReader.CONNECTION_DRIVER));
+        connectionInfo.setConnectionUrl(PropertyReader.getProperty(PropertyReader.CONNECTION_URL));
+        connectionInfo.setUsername(PropertyReader.getProperty(PropertyReader.USER_NAME));
+        connectionInfo.setPassword(PropertyReader.getProperty(PropertyReader.PASSWORD));
+        
+        QueryInfo queryInfo = new QueryInfo();
+        queryInfo.setTableName(PropertyReader.getProperty(PropertyReader.TABLE_NAME));
+        queryInfo.setQuery(PropertyReader.getProperty(PropertyReader.SQL_QUERY));
+        
+        ExtractorInfo extractorInfo = new ExtractorInfo();
+        extractorInfo.setConnectionInfo(connectionInfo);
+        extractorInfo.setQueryInfo(queryInfo);
+        extractorInfo.setFileLocation(PropertyReader.getProperty(PropertyReader.FILE_LOCATION));
+        
+        return extractorInfo;
     }
 }

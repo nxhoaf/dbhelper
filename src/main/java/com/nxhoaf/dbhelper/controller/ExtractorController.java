@@ -17,7 +17,8 @@ import org.dbunit.dataset.DataSetException;
  *
  * @author nxhoaf
  */
-public interface ExtractDataController {
+public interface ExtractorController {
     public void extractPartialData(ExtractorInfo connectionInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException;
     public void extractAllData(ExtractorInfo connectionInfo);
+    public ExtractorInfo getDefaultExtractInfo();
 }
