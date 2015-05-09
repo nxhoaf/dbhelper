@@ -5,17 +5,83 @@
  */
 package com.nxhoaf.dbhelper.view;
 
+import com.nxhoaf.dbhelper.controller.ExtractDataController;
+import com.nxhoaf.dbhelper.controller.ExtractDataControllerImpl;
+import com.nxhoaf.dbhelper.domain.ConnectionInfo;
+import com.nxhoaf.dbhelper.domain.Query;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.dbunit.DatabaseUnitException;
+
 /**
  *
  * @author nxhoaf
  */
 public class ExtractDataView extends javax.swing.JFrame {
+    private ExtractDataController extractDataController;
 
     /**
      * Creates new form MainFrame
+     * @param extractDataController
      */
-    public ExtractDataView() {
+    public ExtractDataView(ExtractDataController extractDataController) {
+        this.extractDataController = extractDataController;
         initComponents();
+        initListener();
+    }
+    
+    private ConnectionInfo populateConnectionInfoData() {
+        ConnectionInfo connInfo = new ConnectionInfo();
+        connInfo.setDriverClass(driver.getText());
+        connInfo.setConnectionUrl(url.getText());
+        connInfo.setUsername(username.getText());
+        connInfo.setPassword(password.getText());
+
+        return connInfo;
+    }
+    
+    private Query populateQueryData() {
+        Query query = new Query();
+        query.setTableName(tableName.getText());
+        query.setQuery(sqlQuery.getText());
+
+        return query;
+    }
+    
+    private void initListener() {
+        ActionListener okBtnListener = new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                ConnectionInfo connInfo = populateConnectionInfoData();
+                Query query = populateQueryData();
+                
+                try {
+                    extractDataController.extractPartialData(connInfo, query);
+                } catch (ClassNotFoundException ex) {
+                    // Problem with Driver
+                    Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    // Problem with SQL or table
+                    Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DatabaseUnitException ex) {
+                    // Can not be cured
+                    Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+       okBtn.addActionListener(okBtnListener);
+       
+       
+       ActionListener resetBtnListener = new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+       resetBtn.addActionListener(resetBtnListener);
     }
 
     /**
@@ -32,7 +98,7 @@ public class ExtractDataView extends javax.swing.JFrame {
         jDialog2 = new javax.swing.JDialog();
         jFileChooser1 = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
-        btnOk = new javax.swing.JButton();
+        okBtn = new javax.swing.JButton();
         canvas1 = new java.awt.Canvas();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -41,7 +107,7 @@ public class ExtractDataView extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
         password = new javax.swing.JTextField();
-        btnReset = new javax.swing.JButton();
+        resetBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -84,10 +150,10 @@ public class ExtractDataView extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 153, 0));
         jLabel1.setText("Database Extractor");
 
-        btnOk.setText("OK");
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        okBtn.setText("OK");
+        okBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                okBtnActionPerformed(evt);
             }
         });
 
@@ -101,7 +167,7 @@ public class ExtractDataView extends javax.swing.JFrame {
 
         username.setText("root");
 
-        btnReset.setText("Reset");
+        resetBtn.setText("Reset");
 
         jLabel8.setText("File Location:");
 
@@ -120,6 +186,7 @@ public class ExtractDataView extends javax.swing.JFrame {
 
         sqlQuery.setColumns(20);
         sqlQuery.setRows(5);
+        sqlQuery.setText("SELECT * FROM employees");
         jScrollPane1.setViewportView(sqlQuery);
 
         tableName.setText("employees");
@@ -174,7 +241,12 @@ public class ExtractDataView extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(resetBtn)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(okBtn))
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel12)
@@ -189,11 +261,7 @@ public class ExtractDataView extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
-                                    .addComponent(jLabel6)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnReset)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnOk)))
+                                    .addComponent(jLabel6))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
@@ -240,8 +308,8 @@ public class ExtractDataView extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOk)
-                    .addComponent(btnReset))
+                    .addComponent(okBtn)
+                    .addComponent(resetBtn))
                 .addGap(18, 18, 18))
         );
 
@@ -252,9 +320,9 @@ public class ExtractDataView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_okBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,18 +351,16 @@ public class ExtractDataView extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
+        final ExtractDataController extractDataController = new ExtractDataControllerImpl();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ExtractDataView().setVisible(true);
+                new ExtractDataView(extractDataController).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnOk;
-    private javax.swing.JButton btnReset;
     private java.awt.Canvas canvas1;
     private javax.swing.JTextField driver;
     private javax.swing.JTextField fileLocation;
@@ -316,7 +382,9 @@ public class ExtractDataView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton okBtn;
     private javax.swing.JTextField password;
+    private javax.swing.JButton resetBtn;
     private javax.swing.JTextArea sqlQuery;
     private javax.swing.JTextField tableName;
     private javax.swing.JTextField url;

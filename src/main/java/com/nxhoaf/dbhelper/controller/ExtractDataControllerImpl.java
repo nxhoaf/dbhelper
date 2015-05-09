@@ -3,22 +3,23 @@ package com.nxhoaf.dbhelper.controller;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
 import com.nxhoaf.dbhelper.domain.Query;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.dbunit.DatabaseUnitException;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 
 public class ExtractDataControllerImpl implements ExtractDataController {
-    
-    
 
     public static void main(String[] args) throws Exception {
 
@@ -38,35 +39,50 @@ public class ExtractDataControllerImpl implements ExtractDataController {
 //        for (String table : partialDataSet.getTableNames()) {
 //            System.out.println(table);
 //        }
-        
-
 //        partialDataSet.addTable("recipe_ext_xref");
 //        FlatXmlDataSet.write(partialDataSet, new FileOutputStream("partial-dataset.xml"));
-
         // full database export
         IDataSet fullDataSet = connection.createDataSet();
         System.out.println("All tables: " + Arrays.toString(fullDataSet.getTableNames()));
 
 //        FlatXmlDataSet.write(fullDataSet, new FileOutputStream("full-dataset.xml"));
-
     }
-    
+
     private IDatabaseConnection getConnection(ConnectionInfo connectionInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
         Class driverClass = Class.forName(connectionInfo.getDriverClass());
-        Connection jdbcConnection = DriverManager.getConnection( connectionInfo.getConnectionUrl(), connectionInfo.getUsername(), connectionInfo.getPassword());
+        Connection jdbcConnection = DriverManager.getConnection(connectionInfo.getConnectionUrl(), connectionInfo.getUsername(), connectionInfo.getPassword());
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
         return connection;
     }
 
-    public void extractPartialData(ConnectionInfo connectionInfo, Query query) throws ClassNotFoundException, SQLException, DatabaseUnitException {
+    public void extractPartialData(ConnectionInfo connectionInfo, Query query) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException {
         IDatabaseConnection connection = getConnection(connectionInfo);
-        
+
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         partialDataSet.addTable(query.getTableName(), query.getQuery());
+        try {
+            FlatXmlDataSet.write(partialDataSet, new FileOutputStream("output/partial-dataset.xml"));
+        } catch (IOException ex) {
+            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void extractAllData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void extractAllData(ConnectionInfo connectionInfo) {
+        IDatabaseConnection connection;
+        try {
+            connection = getConnection(connectionInfo);
+            IDataSet fullDataSet = connection.createDataSet();
+            FlatXmlDataSet.write(fullDataSet, new FileOutputStream("output/full-dataset.xml"));
+        } catch (IOException ex) {
+            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DataSetException ex) {
+            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DatabaseUnitException ex) {
+            Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
 }
