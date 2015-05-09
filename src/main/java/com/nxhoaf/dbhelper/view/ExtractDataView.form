@@ -34,7 +34,7 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Component class="javax.swing.JFileChooser" name="jFileChooser1">
+    <Component class="javax.swing.JFileChooser" name="jFileChooser">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -100,11 +100,6 @@
                                       <EmptySpace min="459" pref="472" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="fileLocation" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="chooseLocationBtn" min="-2" pref="44" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Group type="102" attributes="0">
                                               <Component id="resetBtn" min="-2" max="-2" attributes="0"/>
@@ -115,6 +110,7 @@
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
+                                  <Component id="fileLocation" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
@@ -179,11 +175,10 @@
               </Group>
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="chooseLocationBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="fileLocation" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tableName" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -194,9 +189,9 @@
                   <Component id="jScrollPane1" min="-2" pref="126" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="okBtn" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="resetBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="resetBtn" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
           </Group>
@@ -268,14 +263,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Table name:"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="chooseLocationBtn">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="..."/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chooseLocationBtnActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="fileLocation">
       <Properties>

@@ -16,6 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dbunit.DatabaseUnitException;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 /**
  *
  * @author nxhoaf
@@ -40,6 +43,7 @@ public class ExtractDataView extends javax.swing.JFrame {
         connInfo.setConnectionUrl(url.getText());
         connInfo.setUsername(username.getText());
         connInfo.setPassword(password.getText());
+        connInfo.setFileLocation(fileLocation.getText());
 
         return connInfo;
     }
@@ -63,7 +67,7 @@ public class ExtractDataView extends javax.swing.JFrame {
         jColorChooser1 = new javax.swing.JColorChooser();
         jDialog1 = new javax.swing.JDialog();
         jDialog2 = new javax.swing.JDialog();
-        jFileChooser1 = new javax.swing.JFileChooser();
+        jFileChooser = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         okBtn = new javax.swing.JButton();
         canvas1 = new java.awt.Canvas();
@@ -77,7 +81,6 @@ public class ExtractDataView extends javax.swing.JFrame {
         resetBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        chooseLocationBtn = new javax.swing.JButton();
         fileLocation = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -140,13 +143,6 @@ public class ExtractDataView extends javax.swing.JFrame {
 
         jLabel9.setText("Table name:");
 
-        chooseLocationBtn.setText("...");
-        chooseLocationBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chooseLocationBtnActionPerformed(evt);
-            }
-        });
-
         fileLocation.setText("data-set.xml");
 
         jLabel10.setText("SQL:");
@@ -204,17 +200,14 @@ public class ExtractDataView extends javax.swing.JFrame {
                                         .addComponent(tableName, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(459, 472, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(fileLocation)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(chooseLocationBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(resetBtn)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(okBtn))
                                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(fileLocation)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -262,10 +255,9 @@ public class ExtractDataView extends javax.swing.JFrame {
                     .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chooseLocationBtn)
                     .addComponent(jLabel8)
                     .addComponent(fileLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(tableName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -274,7 +266,7 @@ public class ExtractDataView extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(okBtn)
                     .addComponent(resetBtn))
                 .addGap(18, 18, 18))
@@ -283,14 +275,9 @@ public class ExtractDataView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void chooseLocationBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseLocationBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chooseLocationBtnActionPerformed
-
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
         ConnectionInfo connInfo = populateConnectionInfoData();
         Query query = populateQueryData();
-
         try {
             extractDataController.extractPartialData(connInfo, query);
         } catch (ClassNotFoundException ex) {
@@ -332,7 +319,11 @@ public class ExtractDataView extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        final ExtractDataController extractDataController = new ExtractDataControllerImpl();
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
+//        final ExtractDataController extractDataController = new ExtractDataControllerImpl();
+//            Object o = context.getBean("extractDataController");
+//            System.out.println("object: " + o);
+        final ExtractDataController extractDataController = (ExtractDataController) context.getBean("extractDataController");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -343,13 +334,12 @@ public class ExtractDataView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Canvas canvas1;
-    private javax.swing.JButton chooseLocationBtn;
     private javax.swing.JTextField driver;
     private javax.swing.JTextField fileLocation;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
-    private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JFileChooser jFileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
