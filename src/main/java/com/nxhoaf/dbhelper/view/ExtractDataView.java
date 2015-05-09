@@ -7,14 +7,16 @@ package com.nxhoaf.dbhelper.view;
 
 import com.nxhoaf.dbhelper.controller.ExtractDataController;
 import com.nxhoaf.dbhelper.controller.ExtractDataControllerImpl;
+import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
-import com.nxhoaf.dbhelper.domain.Query;
+import com.nxhoaf.dbhelper.domain.QueryInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dbunit.DatabaseUnitException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -25,6 +27,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ExtractDataView extends javax.swing.JFrame {
 
+    @Autowired
     private ExtractDataController extractDataController;
 
     /**
@@ -37,24 +40,38 @@ public class ExtractDataView extends javax.swing.JFrame {
         initComponents();
     }
 
-    private ConnectionInfo populateConnectionInfoData() {
-        ConnectionInfo connInfo = new ConnectionInfo();
-        connInfo.setDriverClass(driver.getText());
-        connInfo.setConnectionUrl(url.getText());
-        connInfo.setUsername(username.getText());
-        connInfo.setPassword(password.getText());
-        connInfo.setFileLocation(fileLocation.getText());
-
-        return connInfo;
+    private ExtractorInfo getExtractorInfo() {
+        ExtractorInfo extractorInfo = new ExtractorInfo();
+        
+        ConnectionInfo databaseInfo = getConnectionInfo();
+        extractorInfo.setConnectionInfo(databaseInfo);
+        
+        QueryInfo queryInfo = getQueryInfo();
+        extractorInfo.setQueryInfo(queryInfo);
+        
+        extractorInfo.setFileLocation(fileLocation.getText());
+        
+        return extractorInfo;
+    }
+    
+    private ConnectionInfo getConnectionInfo() {
+        ConnectionInfo connectionInfo = new ConnectionInfo();
+        connectionInfo.setDriverClass(driver.getText());
+        connectionInfo.setConnectionUrl(url.getText());
+        connectionInfo.setUsername(username.getText());
+        connectionInfo.setPassword(password.getText());
+        
+        return connectionInfo;
     }
 
-    private Query populateQueryData() {
-        Query query = new Query();
-        query.setTableName(tableName.getText());
-        query.setQuery(sqlQuery.getText());
+    private QueryInfo getQueryInfo() {
+        QueryInfo queryInfo = new QueryInfo();
+        queryInfo.setTableName(tableName.getText());
+        queryInfo.setQuery(sqlQuery.getText());
 
-        return query;
+        return queryInfo;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -276,10 +293,9 @@ public class ExtractDataView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
-        ConnectionInfo connInfo = populateConnectionInfoData();
-        Query query = populateQueryData();
+        ExtractorInfo extractorInfo = getExtractorInfo();
         try {
-            extractDataController.extractPartialData(connInfo, query);
+            extractDataController.extractPartialData(extractorInfo);
         } catch (ClassNotFoundException ex) {
             // Problem with Driver
             Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
@@ -324,7 +340,6 @@ public class ExtractDataView extends javax.swing.JFrame {
 //            Object o = context.getBean("extractDataController");
 //            System.out.println("object: " + o);
         final ExtractDataController extractDataController = (ExtractDataController) context.getBean("extractDataController");
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ExtractDataView(extractDataController).setVisible(true);

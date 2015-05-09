@@ -12,12 +12,10 @@ package com.nxhoaf.dbhelper.domain;
 public class ConnectionInfo {
     private String driverClass;
     private String connectionUrl;
+    
     private String username;
-    private String password;
-    private String fileLocation;
-    private String tableName;
-    private String sqlQuery;
-
+    private String password; 
+    
     public String getDriverClass() {
         return driverClass;
     }
@@ -48,20 +46,5 @@ public class ConnectionInfo {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    public String getFileLocation() {
-        return fileLocation;
-    }
-
-    public void setFileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
-    }
-
-    public String getSqlQuery() {
-        return sqlQuery;
-    }
-
-    public void setSqlQuery(String sqlQuery) {
-        this.sqlQuery = sqlQuery;
     }
 }

@@ -9,7 +9,7 @@ package com.nxhoaf.dbhelper.domain;
  *
  * @author nxhoaf
  */
-public class Query {
+public class QueryInfo {
     private String tableName;
     private String query;
 

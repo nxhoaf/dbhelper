@@ -1,7 +1,8 @@
 package com.nxhoaf.dbhelper.controller;
 
+import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
-import com.nxhoaf.dbhelper.domain.Query;
+import com.nxhoaf.dbhelper.domain.QueryInfo;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,30 +21,30 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 
 public class ExtractDataControllerImpl implements ExtractDataController {
-    private IDatabaseConnection getConnection(ConnectionInfo connectionInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
-        Class driverClass = Class.forName(connectionInfo.getDriverClass());
-        Connection jdbcConnection = DriverManager.getConnection(connectionInfo.getConnectionUrl(), connectionInfo.getUsername(), connectionInfo.getPassword());
+    private IDatabaseConnection getConnection(ConnectionInfo databaseInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
+        Class driverClass = Class.forName(databaseInfo.getDriverClass());
+        Connection jdbcConnection = DriverManager.getConnection(databaseInfo.getConnectionUrl(), databaseInfo.getUsername(), databaseInfo.getPassword());
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
         return connection;
     }
 
-    public void extractPartialData(ConnectionInfo connectionInfo, Query query) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException {
-        IDatabaseConnection connection = getConnection(connectionInfo);
+    public void extractPartialData(ExtractorInfo extractorInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException {
+        IDatabaseConnection connection = getConnection(extractorInfo.getConnectionInfo());
 
         QueryDataSet partialDataSet = new QueryDataSet(connection);
+        QueryInfo query = extractorInfo.getQueryInfo();
         partialDataSet.addTable(query.getTableName(), query.getQuery());
         try {
-            FlatXmlDataSet.write(partialDataSet, new FileOutputStream(connectionInfo.getFileLocation()));
-//            FlatXmlDataSet.write(partialDataSet, new FileOutputStream("output/partial-dataset.xml"));
+            FlatXmlDataSet.write(partialDataSet, new FileOutputStream(extractorInfo.getFileLocation()));
         } catch (IOException ex) {
             Logger.getLogger(ExtractDataControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void extractAllData(ConnectionInfo connectionInfo) {
+    public void extractAllData(ExtractorInfo extractorInfo) {
         IDatabaseConnection connection;
         try {
-            connection = getConnection(connectionInfo);
+            connection = getConnection(extractorInfo.getConnectionInfo());
             IDataSet fullDataSet = connection.createDataSet();
             FlatXmlDataSet.write(fullDataSet, new FileOutputStream("output/full-dataset.xml"));
         } catch (IOException ex) {
@@ -60,7 +61,7 @@ public class ExtractDataControllerImpl implements ExtractDataController {
     }
     
     public static void main(String[] args) throws Exception {
-
+        
         // database connection
         Class driverClass = Class.forName("com.mysql.jdbc.Driver");
 

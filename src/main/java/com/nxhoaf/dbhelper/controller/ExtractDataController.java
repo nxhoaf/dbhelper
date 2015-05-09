@@ -5,8 +5,8 @@
  */
 package com.nxhoaf.dbhelper.controller;
 
-import com.nxhoaf.dbhelper.domain.ConnectionInfo;
-import com.nxhoaf.dbhelper.domain.Query;
+import com.nxhoaf.dbhelper.domain.ExtractorInfo;
+import com.nxhoaf.dbhelper.domain.QueryInfo;
 import java.sql.SQLException;
 import java.util.Observer;
 import javafx.beans.Observable;
@@ -18,6 +18,6 @@ import org.dbunit.dataset.DataSetException;
  * @author nxhoaf
  */
 public interface ExtractDataController {
-    public void extractPartialData(ConnectionInfo connectionInfo, Query query) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException;
-    public void extractAllData(ConnectionInfo connectionInfo);
+    public void extractPartialData(ExtractorInfo connectionInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException;
+    public void extractAllData(ExtractorInfo connectionInfo);
 }
