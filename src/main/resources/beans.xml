@@ -12,7 +12,7 @@
 	<bean id="extractorController" name="extractDataController" class="com.nxhoaf.dbhelper.controller.ExtractorControllerImpl" />
         <!--<context:property-placeholder location="classpath*:ApplicationContext.properties"/>-->
         <!--<context:property-placeholder location="classpath:Application.properties"/>-->
-        <util:properties id="properties" location="classpath:Application.properties"/>
+        <!--<util:properties id="properties" location="classpath:Application.properties"/>-->
         <context:annotation-config />
         <context:component-scan base-package="com.nxhoaf.dbhelper.*" />
         

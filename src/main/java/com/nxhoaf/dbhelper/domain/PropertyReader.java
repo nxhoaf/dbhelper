@@ -31,7 +31,10 @@ public class PropertyReader {
         properties = new Properties();
         InputStream inputStream;
         try {
-            inputStream = new FileInputStream("src/main/resources/Application.properties");
+//            inputStream = PropertyReader.class.getResourceAsStream("Application.properties");
+//            inputStream = new FileInputStream("src/main/resources/Application.properties");
+            inputStream = new FileInputStream("Application.properties");
+//                inputStream = PropertiesLoaderUtils.
             properties.load(inputStream);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
