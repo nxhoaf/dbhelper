@@ -1,5 +1,6 @@
 package com.nxhoaf.dbhelper.controller;
 
+import com.nxhoaf.dbhelper.view.ExtractorObserver;
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
 import com.nxhoaf.dbhelper.domain.PropertyReader;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dbunit.DatabaseUnitException;
@@ -24,6 +27,11 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 
 public class ExtractorControllerImpl implements ExtractorController {
+    private final Set<ExtractorObserver> observers;
+    
+    public ExtractorControllerImpl() {
+        observers = new HashSet<ExtractorObserver>();
+    }
 
     private IDatabaseConnection getConnection(ConnectionInfo databaseInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
         Class driverClass = Class.forName(databaseInfo.getDriverClass());
@@ -32,7 +40,7 @@ public class ExtractorControllerImpl implements ExtractorController {
         return connection;
     }
 
-    public void extractPartialData(ExtractorInfo extractorInfo) {
+    public void dbToXmlPartial(ExtractorInfo extractorInfo) {
         IDatabaseConnection connection;
         try {
             connection = getConnection(extractorInfo.getConnectionInfo());
@@ -40,33 +48,21 @@ public class ExtractorControllerImpl implements ExtractorController {
             QueryInfo query = extractorInfo.getQueryInfo();
             partialDataSet.addTable(query.getTableName(), query.getQuery());
             FlatXmlDataSet.write(partialDataSet, new FileOutputStream(extractorInfo.getFileLocation()));
-        } catch (IOException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DatabaseUnitException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            notifyObservers("DB to XML completed!");
+        } catch (Exception e) {
+            notifyObservers(e.toString());
         }
     }
 
-    public void extractAllData(ExtractorInfo extractorInfo) {
+    public void dbToXmlFull(ExtractorInfo extractorInfo) {
         IDatabaseConnection connection;
         try {
             connection = getConnection(extractorInfo.getConnectionInfo());
             IDataSet fullDataSet = connection.createDataSet();
             FlatXmlDataSet.write(fullDataSet, new FileOutputStream(extractorInfo.getFileLocation()));
-        } catch (IOException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DataSetException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DatabaseUnitException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            notifyObservers("DB to XML completed!");
+        } catch (Exception e) {
+            notifyObservers(e.toString());
         }
     }
 
@@ -76,14 +72,9 @@ public class ExtractorControllerImpl implements ExtractorController {
             connection = getConnection(extractorInfo.getConnectionInfo());
             IDataSet dataSet = new FlatXmlDataSetBuilder().build(new File(extractorInfo.getFileLocation()));
             DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DatabaseUnitException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ExtractorControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            notifyObservers("XML to DB completed!");
+        } catch (Exception e) {
+            notifyObservers(e.toString());
         }
     }
 
@@ -105,5 +96,20 @@ public class ExtractorControllerImpl implements ExtractorController {
         extractorInfo.setFileLocation(PropertyReader.getProperty(PropertyReader.FILE_LOCATION));
 
         return extractorInfo;
+    }
+
+    public void addObserver(ExtractorObserver extractorObserver) {
+        observers.add(extractorObserver);
+    }
+
+    public void removeObserver(ExtractorObserver extractorObserver) {
+        observers.remove(extractorObserver);
+                
+    }
+
+    public void notifyObservers(String message) {
+        for (ExtractorObserver observer: observers) {
+            observer.update(message);
+        }
     }
 }

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nxhoaf.dbhelper.domain;
+package com.nxhoaf.dbhelper.view;
 
 /**
  *
  * @author nxhoaf
  */
-public enum SupportDriver {
-    
+public interface ExtractorObserver {
+    public void update(String message);
 }

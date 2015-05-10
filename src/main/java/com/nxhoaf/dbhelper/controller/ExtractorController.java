@@ -6,14 +6,15 @@
 package com.nxhoaf.dbhelper.controller;
 
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
+import javafx.beans.Observable;
 
 /**
  *
  * @author nxhoaf
  */
-public interface ExtractorController {
-    public void extractPartialData(ExtractorInfo extractorInfo);
-    public void extractAllData(ExtractorInfo extractorInfo);
-    public ExtractorInfo getDefaultExtractInfo();
+public interface ExtractorController extends ExtractorObservable {
+    public void dbToXmlPartial(ExtractorInfo extractorInfo);
+    public void dbToXmlFull(ExtractorInfo extractorInfo);
     public void xmlToDB(ExtractorInfo extractorInfo);
+    public ExtractorInfo getDefaultExtractInfo();
 }
