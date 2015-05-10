@@ -9,10 +9,6 @@ import com.nxhoaf.dbhelper.controller.ExtractorController;
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
 import com.nxhoaf.dbhelper.domain.QueryInfo;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.dbunit.DatabaseUnitException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.ApplicationContext;
@@ -105,7 +101,7 @@ public class ExtractDataView extends javax.swing.JFrame {
         jDialog2 = new javax.swing.JDialog();
         jFileChooser = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
-        okBtn = new javax.swing.JButton();
+        dbToXmlBtn = new javax.swing.JButton();
         canvas1 = new java.awt.Canvas();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -114,7 +110,7 @@ public class ExtractDataView extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
         password = new javax.swing.JTextField();
-        resetBtn = new javax.swing.JButton();
+        xmlToDbBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         fileLocation = new javax.swing.JTextField();
@@ -156,10 +152,10 @@ public class ExtractDataView extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 153, 0));
         jLabel1.setText("Database Extractor");
 
-        okBtn.setText("OK");
-        okBtn.addActionListener(new java.awt.event.ActionListener() {
+        dbToXmlBtn.setText("DB to XML");
+        dbToXmlBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okBtnActionPerformed(evt);
+                dbToXmlBtnActionPerformed(evt);
             }
         });
 
@@ -169,10 +165,10 @@ public class ExtractDataView extends javax.swing.JFrame {
 
         jLabel7.setText("Password:");
 
-        resetBtn.setText("Reset");
-        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+        xmlToDbBtn.setText("XML to DB");
+        xmlToDbBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetBtnActionPerformed(evt);
+                xmlToDbBtnActionPerformed(evt);
             }
         });
 
@@ -238,9 +234,9 @@ public class ExtractDataView extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(resetBtn)
+                                                .addComponent(xmlToDbBtn)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(okBtn))
+                                                .addComponent(dbToXmlBtn))
                                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(fileLocation)))
@@ -303,37 +299,28 @@ public class ExtractDataView extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(okBtn)
-                    .addComponent(resetBtn))
+                    .addComponent(dbToXmlBtn)
+                    .addComponent(xmlToDbBtn))
                 .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+    private void dbToXmlBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbToXmlBtnActionPerformed
         ExtractorInfo extractorInfo = getExtractorInfo();
-        try {
-            extractDataController.extractPartialData(extractorInfo);
-        } catch (ClassNotFoundException ex) {
-            // Problem with Driver
-            Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            // Problem with SQL or table
-            Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DatabaseUnitException ex) {
-            // Can not be cured
-            Logger.getLogger(ExtractDataView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_okBtnActionPerformed
+        extractDataController.extractPartialData(extractorInfo);
+    }//GEN-LAST:event_dbToXmlBtnActionPerformed
 
     private void tableNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tableNameActionPerformed
 
-    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+    private void xmlToDbBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xmlToDbBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_resetBtnActionPerformed
+        ExtractorInfo extractorInfo = getExtractorInfo();
+        extractDataController.xmlToDB(extractorInfo);
+    }//GEN-LAST:event_xmlToDbBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -373,6 +360,7 @@ public class ExtractDataView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Canvas canvas1;
+    private javax.swing.JButton dbToXmlBtn;
     private javax.swing.JTextField driver;
     private javax.swing.JTextField fileLocation;
     private javax.swing.JColorChooser jColorChooser1;
@@ -392,12 +380,11 @@ public class ExtractDataView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton okBtn;
     private javax.swing.JTextField password;
-    private javax.swing.JButton resetBtn;
     private javax.swing.JTextArea sqlQuery;
     private javax.swing.JTextField tableName;
     private javax.swing.JTextField url;
     private javax.swing.JTextField username;
+    private javax.swing.JButton xmlToDbBtn;
     // End of variables declaration//GEN-END:variables
 }

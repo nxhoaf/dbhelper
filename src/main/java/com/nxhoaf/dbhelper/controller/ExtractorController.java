@@ -6,19 +6,14 @@
 package com.nxhoaf.dbhelper.controller;
 
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
-import com.nxhoaf.dbhelper.domain.QueryInfo;
-import java.sql.SQLException;
-import java.util.Observer;
-import javafx.beans.Observable;
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.dataset.DataSetException;
 
 /**
  *
  * @author nxhoaf
  */
 public interface ExtractorController {
-    public void extractPartialData(ExtractorInfo connectionInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException, DataSetException;
-    public void extractAllData(ExtractorInfo connectionInfo);
+    public void extractPartialData(ExtractorInfo extractorInfo);
+    public void extractAllData(ExtractorInfo extractorInfo);
     public ExtractorInfo getDefaultExtractInfo();
+    public void xmlToDB(ExtractorInfo extractorInfo);
 }

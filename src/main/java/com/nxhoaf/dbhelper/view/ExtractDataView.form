@@ -102,9 +102,9 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <Component id="resetBtn" min="-2" max="-2" attributes="0"/>
+                                              <Component id="xmlToDbBtn" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="okBtn" min="-2" max="-2" attributes="0"/>
+                                              <Component id="dbToXmlBtn" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jScrollPane1" min="-2" pref="599" max="-2" attributes="0"/>
                                       </Group>
@@ -189,8 +189,8 @@
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="okBtn" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="resetBtn" min="-2" max="-2" attributes="0"/>
+                  <Component id="dbToXmlBtn" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="xmlToDbBtn" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
           </Group>
@@ -209,12 +209,12 @@
         <Property name="text" type="java.lang.String" value="Database Extractor"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="okBtn">
+    <Component class="javax.swing.JButton" name="dbToXmlBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="OK"/>
+        <Property name="text" type="java.lang.String" value="DB to XML"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dbToXmlBtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="java.awt.Canvas" name="canvas1">
@@ -242,12 +242,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="password">
     </Component>
-    <Component class="javax.swing.JButton" name="resetBtn">
+    <Component class="javax.swing.JButton" name="xmlToDbBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Reset"/>
+        <Property name="text" type="java.lang.String" value="XML to DB"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="xmlToDbBtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
