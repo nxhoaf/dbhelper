@@ -5,14 +5,14 @@
  */
 package com.nxhoaf.dbhelper.view;
 
-import com.nxhoaf.dbhelper.controller.ExtractorController;
-import com.nxhoaf.dbhelper.domain.ExtractorInfo;
-import com.nxhoaf.dbhelper.domain.ConnectionInfo;
-import com.nxhoaf.dbhelper.domain.QueryInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.nxhoaf.dbhelper.controller.ExtractorController;
+import com.nxhoaf.dbhelper.domain.ConnectionInfo;
+import com.nxhoaf.dbhelper.domain.ExtractorInfo;
+import com.nxhoaf.dbhelper.domain.QueryInfo;
 
 /**
  *
@@ -20,7 +20,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ExtractDataView extends javax.swing.JFrame implements ExtractorObserver {
 
-    @Autowired
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Autowired
     private ExtractorController extractDataController;
 
     /**
@@ -33,14 +37,8 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
         initComponents();
         initDefaultData();
         extractDataController.addObserver(this);
-        
-//                JTextField textField = new JTextField("Cut, copy and paste...", 30);
-//        textField.setTransferHandler(th);
-//        textField.setDragEnabled(true);
-//        this.add(textField);
     }
     
-    @Override
     public void update(String message) {
         returnMessage.setText(message);
     }
@@ -132,6 +130,7 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
         jScrollPane2 = new javax.swing.JScrollPane();
         returnMessage = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
+        allDbToXml = new javax.swing.JButton();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -210,6 +209,13 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
 
         jLabel13.setText("Return Msg:");
 
+        allDbToXml.setText("All DB to XML");
+        allDbToXml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allDbToXmlActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -271,12 +277,14 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
                             .addComponent(fileLocation)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(xmlToDbBtn)
                                         .addGap(18, 18, 18)
-                                        .addComponent(dbToXmlBtn))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addComponent(dbToXmlBtn)
+                                        .addGap(13, 13, 13)
+                                        .addComponent(allDbToXml)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
@@ -322,7 +330,9 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dbToXmlBtn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(dbToXmlBtn)
+                        .addComponent(allDbToXml))
                     .addComponent(xmlToDbBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,6 +358,12 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
         ExtractorInfo extractorInfo = getExtractorInfo();
         extractDataController.xmlToDB(extractorInfo);
     }//GEN-LAST:event_xmlToDbBtnActionPerformed
+
+    private void allDbToXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allDbToXmlActionPerformed
+        // TODO add your handling code here:
+        ExtractorInfo extractorInfo = getExtractorInfo();
+        extractDataController.dbToXmlFull(extractorInfo);
+    }//GEN-LAST:event_allDbToXmlActionPerformed
 
     /**
      * @param args the command line arguments
@@ -376,7 +392,8 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
         }
         //</editor-fold>
         //</editor-fold>
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
+        @SuppressWarnings("resource")
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
         final ExtractorController extractDataController = (ExtractorController) context.getBean("extractorController");
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -386,6 +403,7 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton allDbToXml;
     private java.awt.Canvas canvas1;
     private javax.swing.JButton dbToXmlBtn;
     private javax.swing.JTextField driver;

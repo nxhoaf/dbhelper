@@ -132,13 +132,15 @@
                           <Component id="fileLocation" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Group type="102" attributes="0">
+                                  <Component id="jScrollPane1" alignment="0" pref="599" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
                                       <Component id="xmlToDbBtn" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="dbToXmlBtn" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                      <Component id="allDbToXml" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jScrollPane1" alignment="0" pref="599" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -200,7 +202,10 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="dbToXmlBtn" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="dbToXmlBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="allDbToXml" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="xmlToDbBtn" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="7" max="32767" attributes="0"/>
@@ -346,6 +351,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Return Msg:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="allDbToXml">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="All DB to XML"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="allDbToXmlActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

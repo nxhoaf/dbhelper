@@ -1,30 +1,27 @@
 package com.nxhoaf.dbhelper.controller;
 
-import com.nxhoaf.dbhelper.view.ExtractorObserver;
-import com.nxhoaf.dbhelper.domain.ExtractorInfo;
-import com.nxhoaf.dbhelper.domain.ConnectionInfo;
-import com.nxhoaf.dbhelper.domain.PropertyReader;
-import com.nxhoaf.dbhelper.domain.QueryInfo;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.dbunit.DatabaseUnitException;
 
+import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+
+import com.nxhoaf.dbhelper.domain.ConnectionInfo;
+import com.nxhoaf.dbhelper.domain.ExtractorInfo;
+import com.nxhoaf.dbhelper.domain.PropertyReader;
+import com.nxhoaf.dbhelper.domain.QueryInfo;
+import com.nxhoaf.dbhelper.view.ExtractorObserver;
 
 public class ExtractorControllerImpl implements ExtractorController {
     private final Set<ExtractorObserver> observers;
@@ -34,10 +31,10 @@ public class ExtractorControllerImpl implements ExtractorController {
     }
 
     private IDatabaseConnection getConnection(ConnectionInfo databaseInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
-        Class driverClass = Class.forName(databaseInfo.getDriverClass());
+        // Load the driver
+        Class<?> driverClass = Class.forName(databaseInfo.getDriverClass());
         Connection jdbcConnection = DriverManager.getConnection(databaseInfo.getConnectionUrl(), databaseInfo.getUsername(), databaseInfo.getPassword());
-        IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-        return connection;
+        return new DatabaseConnection(jdbcConnection);
     }
 
     public void dbToXmlPartial(ExtractorInfo extractorInfo) {
@@ -48,7 +45,7 @@ public class ExtractorControllerImpl implements ExtractorController {
             QueryInfo query = extractorInfo.getQueryInfo();
             partialDataSet.addTable(query.getTableName(), query.getQuery());
             FlatXmlDataSet.write(partialDataSet, new FileOutputStream(extractorInfo.getFileLocation()));
-            notifyObservers("DB to XML completed!");
+            notifyObservers(DB_TO_XML_COMPLETED);
         } catch (Exception e) {
             notifyObservers(e.toString());
         }
@@ -60,7 +57,7 @@ public class ExtractorControllerImpl implements ExtractorController {
             connection = getConnection(extractorInfo.getConnectionInfo());
             IDataSet fullDataSet = connection.createDataSet();
             FlatXmlDataSet.write(fullDataSet, new FileOutputStream(extractorInfo.getFileLocation()));
-            notifyObservers("DB to XML completed!");
+            notifyObservers(DB_TO_XML_COMPLETED);
         } catch (Exception e) {
             notifyObservers(e.toString());
         }
@@ -72,7 +69,7 @@ public class ExtractorControllerImpl implements ExtractorController {
             connection = getConnection(extractorInfo.getConnectionInfo());
             IDataSet dataSet = new FlatXmlDataSetBuilder().build(new File(extractorInfo.getFileLocation()));
             DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-            notifyObservers("XML to DB completed!");
+            notifyObservers(XML_TO_DB_COMPLETED);
         } catch (Exception e) {
             notifyObservers(e.toString());
         }
