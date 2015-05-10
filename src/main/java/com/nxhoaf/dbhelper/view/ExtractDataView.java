@@ -6,12 +6,9 @@
 package com.nxhoaf.dbhelper.view;
 
 import com.nxhoaf.dbhelper.controller.ExtractorController;
-import com.nxhoaf.dbhelper.controller.ExtractorControllerImpl;
 import com.nxhoaf.dbhelper.domain.ExtractorInfo;
 import com.nxhoaf.dbhelper.domain.ConnectionInfo;
 import com.nxhoaf.dbhelper.domain.QueryInfo;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +36,11 @@ public class ExtractDataView extends javax.swing.JFrame {
         this.extractDataController = extractDataController;
         initComponents();
         initDefaultData();
+        
+//                JTextField textField = new JTextField("Cut, copy and paste...", 30);
+//        textField.setTransferHandler(th);
+//        textField.setDragEnabled(true);
+//        this.add(textField);
     }
     
     private void initDefaultData() {
@@ -168,6 +170,11 @@ public class ExtractDataView extends javax.swing.JFrame {
         jLabel7.setText("Password:");
 
         resetBtn.setText("Reset");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("File Location:");
 
@@ -257,20 +264,20 @@ public class ExtractDataView extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2)
+                        .addComponent(canvas1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(canvas1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1))
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel1))
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(url, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -298,7 +305,7 @@ public class ExtractDataView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(okBtn)
                     .addComponent(resetBtn))
-                .addGap(18, 18, 18))
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -323,6 +330,10 @@ public class ExtractDataView extends javax.swing.JFrame {
     private void tableNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tableNameActionPerformed
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_resetBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -352,9 +363,6 @@ public class ExtractDataView extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
-//        final ExtractorController extractDataController = new ExtractorControllerImpl();
-//            Object o = context.getBean("extractDataController");
-//            System.out.println("object: " + o);
         final ExtractorController extractDataController = (ExtractorController) context.getBean("extractorController");
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
