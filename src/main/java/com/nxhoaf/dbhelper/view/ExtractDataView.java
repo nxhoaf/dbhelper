@@ -100,10 +100,8 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jColorChooser1 = new javax.swing.JColorChooser();
         jDialog1 = new javax.swing.JDialog();
         jDialog2 = new javax.swing.JDialog();
-        jFileChooser = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         dbToXmlBtn = new javax.swing.JButton();
         canvas1 = new java.awt.Canvas();
@@ -408,10 +406,8 @@ public class ExtractDataView extends javax.swing.JFrame implements ExtractorObse
     private javax.swing.JButton dbToXmlBtn;
     private javax.swing.JTextField driver;
     private javax.swing.JTextField fileLocation;
-    private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
-    private javax.swing.JFileChooser jFileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

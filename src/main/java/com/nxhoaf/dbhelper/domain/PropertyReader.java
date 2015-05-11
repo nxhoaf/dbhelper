@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+
 /**
  *
  * @author nxhoaf
@@ -25,7 +29,7 @@ public class PropertyReader {
     public static final String SQL_QUERY = "database.sqlQuery";
     
     
-    private static final Properties properties;
+    private static Properties properties;
     
     static {
         properties = new Properties();
@@ -33,9 +37,13 @@ public class PropertyReader {
         try {
 //            inputStream = PropertyReader.class.getResourceAsStream("Application.properties");
 //            inputStream = new FileInputStream("src/main/resources/Application.properties");
-            inputStream = new FileInputStream("Application.properties");
+//            inputStream = new FileInputStream("classpath:Application.properties");
 //                inputStream = PropertiesLoaderUtils.
-            properties.load(inputStream);
+            
+            Resource resource = new ClassPathResource("Application.properties");
+//            Properties props = PropertiesLoaderUtils.loadProperties(resource);
+            properties = PropertiesLoaderUtils.loadProperties(resource);
+//            properties.load(inputStream);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
