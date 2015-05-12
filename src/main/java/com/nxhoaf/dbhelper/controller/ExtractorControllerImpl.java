@@ -32,7 +32,7 @@ public class ExtractorControllerImpl implements ExtractorController {
 
     private IDatabaseConnection getConnection(ConnectionInfo databaseInfo) throws ClassNotFoundException, SQLException, DatabaseUnitException {
         // Load the driver
-        Class<?> driverClass = Class.forName(databaseInfo.getDriverClass());
+        Class.forName(databaseInfo.getDriverClass());
         Connection jdbcConnection = DriverManager.getConnection(databaseInfo.getConnectionUrl(), databaseInfo.getUsername(), databaseInfo.getPassword());
         return new DatabaseConnection(jdbcConnection);
     }

@@ -5,10 +5,8 @@
  */
 package com.nxhoaf.dbhelper.domain;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import org.springframework.core.io.ClassPathResource;
@@ -33,17 +31,9 @@ public class PropertyReader {
     
     static {
         properties = new Properties();
-        InputStream inputStream;
         try {
-//            inputStream = PropertyReader.class.getResourceAsStream("Application.properties");
-//            inputStream = new FileInputStream("src/main/resources/Application.properties");
-//            inputStream = new FileInputStream("classpath:Application.properties");
-//                inputStream = PropertiesLoaderUtils.
-            
             Resource resource = new ClassPathResource("Application.properties");
-//            Properties props = PropertiesLoaderUtils.loadProperties(resource);
             properties = PropertiesLoaderUtils.loadProperties(resource);
-//            properties.load(inputStream);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
